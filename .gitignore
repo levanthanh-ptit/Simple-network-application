@@ -29,3 +29,4 @@ hs_err_pid*
 /MauUDP/Server/build/
 /MauUDP/Server/dist/
 /MauUDP/Server/nbproject/private/
+/UDP/UDPMultiThread Client/nbproject/private/
