@@ -7,12 +7,12 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Server extends Thread {
+public class TCPMServer extends Thread {
 
     Socket socket;
     static boolean flag = false;
 
-    public Server(Socket socket) {
+    public TCPMServer(Socket socket) {
         this.socket = socket;
     }
 
@@ -20,7 +20,6 @@ public class Server extends Thread {
         try {
             DataInputStream rec = new DataInputStream(socket.getInputStream());
             DataOutputStream send = new DataOutputStream(socket.getOutputStream());
-
 /** 
  * --------------------------------
  *      Application contents      
@@ -37,7 +36,7 @@ public class Server extends Thread {
             send.close();
             socket.close();
         } catch (Exception e) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(TCPMServer.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 }

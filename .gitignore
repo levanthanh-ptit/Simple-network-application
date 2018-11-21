@@ -22,3 +22,10 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /UDP/MultiThread Server/nbproject/private/
+/UDP/UDPMultiThread Server/nbproject/private/
+/MauUDP/Client/build/
+/MauUDP/Client/dist/
+/MauUDP/Client/nbproject/private/
+/MauUDP/Server/build/
+/MauUDP/Server/dist/
+/MauUDP/Server/nbproject/private/

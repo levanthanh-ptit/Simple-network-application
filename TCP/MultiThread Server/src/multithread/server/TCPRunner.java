@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Runner {
+public class TCPRunner {
 
     public static void main(String[] args) throws IOException {
-         ServerSocket serverSocket = new ServerSocket(8080);
+        ServerSocket serverSocket = new ServerSocket(8080);
         while(true){
             Socket socket = serverSocket.accept();
-            Server b1_Server = new Server(socket);
-            b1_Server.start();
+            TCPMServer _TCPMServer = new TCPMServer(socket);
+            _TCPMServer.start();
         }
     }
     
