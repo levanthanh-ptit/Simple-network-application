@@ -1,4 +1,3 @@
-
 package multithread.server;
 
 import java.io.DataInputStream;
@@ -20,18 +19,13 @@ public class TCPMServer extends Thread {
         try {
             DataInputStream rec = new DataInputStream(socket.getInputStream());
             DataOutputStream send = new DataOutputStream(socket.getOutputStream());
-/** 
- * --------------------------------
- *      Application contents      
- * --------------------------------
- */
-            
-
-/**
- * --------------------------------
- *      Application contents      
- * --------------------------------
- */
+            /**
+             * Application contents --------------------------------
+             */
+            send.write(rec.read()+rec.read());
+            /**
+             * Application contents --------------------------------
+             */
             rec.close();
             send.close();
             socket.close();

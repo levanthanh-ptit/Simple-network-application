@@ -1,4 +1,4 @@
-package singlethread.server;
+package singlethread.tcpserver;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,7 +7,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Server {
+public class TCPServer {
+
     public static void main(String[] args) {
         ServerSocket serverSocket;
         Socket socket;
@@ -16,21 +17,17 @@ public class Server {
             socket = serverSocket.accept();
             DataInputStream rec = new DataInputStream(socket.getInputStream());
             DataOutputStream send = new DataOutputStream(socket.getOutputStream());
-/** 
- * --------------------------------
- *      Application contents      
- * --------------------------------
- */
-
-/** 
- * --------------------------------
- *      Application contents      
- * --------------------------------
- */
+            /**
+             * Application contents --------------------------------
+             */
+            
+            /**
+             * Application contents --------------------------------
+             */
             socket.close();
             serverSocket.close();
         } catch (Exception e) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 

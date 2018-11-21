@@ -16,11 +16,10 @@ public class UDPRunner {
 
     public static void main(String[] args) throws IOException {
         DatagramSocket serverSocket = new DatagramSocket(8080);
-             
+      
             UDPMServer _UDPMServer = new UDPMServer(serverSocket);   
             _UDPMServer.acceptConnect();
-            System.out.println("wait");
             _UDPMServer.start();
-        
+            
     }
 }

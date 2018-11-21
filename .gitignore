@@ -32,3 +32,7 @@ hs_err_pid*
 /UDP/UDPMultiThread Client/nbproject/private/
 /UDP/UDPMultiThread Server/build/
 /UDP/UDPMultiThread Client/build/
+/TCP/SingleThread Client/nbproject/private/
+/TCP/MultiThread Client/nbproject/private/
+/TCP/MultiThread Server/build/
+/TCP/MultiThread Client/build/

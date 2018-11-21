@@ -89,5 +89,6 @@ public class UDPMServer extends Thread {
         /**
          * Application contents --------------------------------
          */
+        socket.close();
     }
 }
