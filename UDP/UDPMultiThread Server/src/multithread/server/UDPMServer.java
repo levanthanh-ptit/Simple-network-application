@@ -47,7 +47,7 @@ public class UDPMServer extends Thread {
         }
     }
 
-    public void receive(byte[] buffArray) throws IOException {
+    public void receive() throws IOException {
         DatagramPacket p = new DatagramPacket(buffArray, buffArray.length);
         socket.receive(p);
         String[] sp = new String(p.getData()).trim().split("#");
@@ -70,27 +70,24 @@ public class UDPMServer extends Thread {
     }
 
     public void run() {
-        if(!acceptConnect()){
-            try {
-                send("403 connect unaccepted!!");
-            } catch (IOException ex) {
-                Logger.getLogger(UDPMServer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        else{
-            /** 
-            * --------------------------------
-            *      Application contents      
-            * --------------------------------
-            */
-                
 
-            /**
-            * --------------------------------
-            *      Application contents      
-            * --------------------------------
-            */
-        
+        /**
+         * Application contents --------------------------------
+         */
+        try {
+            System.out.println("Client connected");
+            this.receive();
+            System.out.println(dataPool[0]);
+            this.receive();
+            System.out.println(dataPool[1]);
+            this.send(Integer.parseInt(dataPool[0]) - Integer.parseInt(dataPool[1]));
+
+        } catch (IOException ex) {
+            Logger.getLogger(UDPMServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        /**
+         * Application contents --------------------------------
+         */
     }
 }
