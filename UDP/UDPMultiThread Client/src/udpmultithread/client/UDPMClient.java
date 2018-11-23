@@ -22,38 +22,43 @@ import java.util.logging.Logger;
 public class UDPMClient {
 
     DatagramSocket socket;
-    byte[] buffArray = new byte[256];
     InetAddress ServerAddress;
     int ServerPort;
     int PacketTag = 0;
+    int PacketSize = 256;
 
     public UDPMClient(int ServerPort) throws SocketException, UnknownHostException {
         socket = new DatagramSocket();
         ServerAddress = InetAddress.getByName("localhost");
         this.ServerPort = ServerPort;
     }
-    public UDPMClient(String host,int ServerPort) throws SocketException, UnknownHostException {
+
+    public byte[] getBuffPacket() {
+        return new byte[this.PacketSize];
+    }
+
+    public UDPMClient(String host, int ServerPort) throws SocketException, UnknownHostException {
         socket = new DatagramSocket();
         ServerAddress = InetAddress.getByName(host);
         this.ServerPort = ServerPort;
     }
 
-    public boolean requestConnect(int packetCount) {
-        byte[] bufRes = new byte[256];
-        bufRes = String.valueOf(packetCount).getBytes();
+    public boolean requestConnect(int packetCount, int packetSize) {
+        byte[] bufRes = getBuffPacket();
+        String requestConnectString = "" + packetCount + "," + packetSize + "";
+        bufRes = requestConnectString.getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ServerAddress, ServerPort);
+        this.PacketSize = packetSize;
         try {
             this.socket.send(Res);
             return true;
         } catch (IOException ex) {
             return false;
         }
-        
-
     }
 
-    public String receive(byte[] buffArray) {
-        DatagramPacket p = new DatagramPacket(buffArray, buffArray.length);
+    public String receive() {
+        DatagramPacket p = new DatagramPacket(getBuffPacket(), this.PacketSize);
         try {
             socket.receive(p);
         } catch (IOException ex) {
@@ -63,7 +68,7 @@ public class UDPMClient {
     }
 
     public void send(int num) throws IOException {
-        byte[] bufRes = new byte[256];
+        byte[] bufRes = getBuffPacket();
         bufRes = (String.valueOf(PacketTag) + "#" + String.valueOf(num)).getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ServerAddress, ServerPort);
         this.socket.send(Res);
@@ -71,32 +76,47 @@ public class UDPMClient {
     }
 
     public void send(String data) throws IOException {
-        byte[] bufRes = new byte[256];
+        byte[] bufRes = getBuffPacket();
         bufRes = (String.valueOf(PacketTag) + "#" + data).getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ServerAddress, ServerPort);
         this.socket.send(Res);
         PacketTag++;
+    }
 
+    public void failedLastSend() {
+        this.PacketTag--;
     }
 
     public static void main(String[] args) throws SocketException, UnknownHostException {
-        UDPMClient client = new UDPMClient(8080);
+        UDPMClient client = new UDPMClient(4442);
         Scanner scan = new Scanner(System.in);
         /**
          * Application contents --------------------------------
          */
-        if (client.requestConnect(scan.nextInt())) {
+        if (client.requestConnect(3, 1024)) {   //3 packets 1024 bytes
             try {
 
-                client.send(scan.nextInt());
-                client.send(scan.nextInt());
-                System.out.println(client.receive(new byte[256]));
+                int numCount = 0;
+                while (numCount < 3) {
+                    int a;
+                    System.out.print("Nhap so: ");
+                    a = scan.nextInt();
+                    client.send(a);
+                    String res = client.receive();
+                    if (res.compareTo("sai") == 0) {
+                        System.out.println("Nhap sai, xin nhap lai");
+                        client.failedLastSend();
+                    } else if (res.compareTo("dung") == 0) {
+                        numCount++;
+                    }
+                }
+                int sum = Integer.parseInt(client.receive());
+                System.out.println("Tong 3 so la: " + sum);
 
             } catch (IOException ex) {
                 Logger.getLogger(UDPMClient.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else{
+        } else {
             System.out.println("Server not found");
         }
         /**

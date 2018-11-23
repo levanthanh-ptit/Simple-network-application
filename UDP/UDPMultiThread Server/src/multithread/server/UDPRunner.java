@@ -15,7 +15,7 @@ import java.net.DatagramSocket;
 public class UDPRunner {
 
     public static void main(String[] args) throws IOException {
-        DatagramSocket serverSocket = new DatagramSocket(8080);
+        DatagramSocket serverSocket = new DatagramSocket(4442);
       
             UDPMServer _UDPMServer = new UDPMServer(serverSocket);   
             _UDPMServer.acceptConnect();

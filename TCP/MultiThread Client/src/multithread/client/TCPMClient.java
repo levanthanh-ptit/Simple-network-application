@@ -33,9 +33,22 @@ public class TCPMClient {
              * Application contents --------------------------------
              */
             send.write(scan.nextInt());
-            send.write(scan.nextInt());
-            int value =  rec.read();
-            System.out.println(value);
+//            int numCount = 0;
+//            while (numCount < 3) {
+//                System.out.print("Nhap so: ");
+//                send.write(scan.nextInt());
+//                String res = rec.readUTF();
+//                if (res == "sai") {
+//                    System.out.println("Nhap sai, xin nhap lai");
+//                    System.out.print("Nhap so: ");
+//                    send.write(scan.nextInt());
+//                } else if (res == "dung") {
+//                    numCount ++;
+//                }
+//            }
+//            int sum = rec.readInt();
+//            System.out.println("Tong 3 so la: "+sum);
+
             /**
              * Application contents --------------------------------
              */
@@ -46,5 +59,5 @@ public class TCPMClient {
             Logger.getLogger(TCPMClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

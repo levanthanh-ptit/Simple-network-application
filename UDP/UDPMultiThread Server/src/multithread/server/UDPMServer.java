@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,26 +21,38 @@ import java.util.logging.Logger;
 public class UDPMServer extends Thread {
 
     DatagramSocket socket;
-    byte[] buffArray = new byte[256];
     InetAddress ClientAddress;
     int ClientPort;
     int DataReceivedCount = 0;
-
+    int PacketSize = 256;
     String[] dataPool;
 
     public UDPMServer(DatagramSocket socket) {
         this.socket = socket;
     }
-
+    public byte[] getBuffPacket(){
+        return new byte[this.PacketSize];
+    }
+    public void showClientInfo(){
+        System.out.println(this.ClientAddress.toString());
+        System.out.println("ClientPort: "+this.ClientPort);
+        System.out.println("PacketSize: "+this.PacketSize+" Byte");
+        System.out.println("Data Pool size: "+this.dataPool.length);
+    }
     public boolean acceptConnect() {
-
-        try {
-            DatagramPacket p = new DatagramPacket(buffArray, buffArray.length);
+        DatagramPacket p = new DatagramPacket(this.getBuffPacket(), this.PacketSize);
+        try {         
             socket.receive(p);
-            int UpComingPacketCount = Integer.parseInt(new String(p.getData()).trim());
-            dataPool = new String[UpComingPacketCount];
-            ClientAddress = p.getAddress();
-            ClientPort = p.getPort();
+            String ex = new String(p.getData()).trim();
+            String[] DPSizeAndPacketSize = new String(p.getData()).trim().split(",");
+             int UpComingPacketCount = Integer.parseInt(DPSizeAndPacketSize[0]);
+            this.PacketSize = Integer.parseInt(DPSizeAndPacketSize[1]);           
+            this.dataPool = new String[UpComingPacketCount];
+            this.ClientAddress = p.getAddress();
+            this.ClientPort = p.getPort();
+            Calendar currentTime = Calendar.getInstance();
+            System.out.println("Accept connect at: " +new SimpleDateFormat("HH:mm:ss").format(currentTime.getTime()));
+            showClientInfo();
             return true;
         } catch (IOException ex) {
             Logger.getLogger(UDPMServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -47,23 +60,24 @@ public class UDPMServer extends Thread {
         }
     }
 
-    public void receive() throws IOException {
-        DatagramPacket p = new DatagramPacket(buffArray, buffArray.length);
+    public int receive() throws IOException {
+        DatagramPacket p = new DatagramPacket(this.getBuffPacket(), this.PacketSize);
         socket.receive(p);
         String[] sp = new String(p.getData()).trim().split("#");
         dataPool[Integer.parseInt(sp[0])] = sp[1];
         DataReceivedCount++;
+        return Integer.parseInt(sp[0]);
     }
 
     public void send(int num) throws IOException {
-        byte[] bufRes = new byte[256];
+        byte[] bufRes = getBuffPacket();
         bufRes = String.valueOf(num).getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ClientAddress, ClientPort);
         this.socket.send(Res);
     }
 
     public void send(String data) throws IOException {
-        byte[] bufRes = new byte[256];
+        byte[] bufRes = getBuffPacket();
         bufRes = data.getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ClientAddress, ClientPort);
         this.socket.send(Res);
@@ -75,12 +89,23 @@ public class UDPMServer extends Thread {
          * Application contents --------------------------------
          */
         try {
-            System.out.println("Client connected");
-            this.receive();
-            System.out.println(dataPool[0]);
-            this.receive();
-            System.out.println(dataPool[1]);
-            this.send(Integer.parseInt(dataPool[0]) - Integer.parseInt(dataPool[1]));
+            int[] arr = new int[3];
+            int numCount = 0;
+            while (numCount < 3) {
+                int i = receive();
+                int num = Integer.parseInt(dataPool[i]);
+                if ((num % 2) == 0) {
+                    send("sai");
+                    DataReceivedCount--;
+                } else {
+                    numCount++;
+                    send("dung");
+                }
+            }
+            for (int i = 0; i < this.dataPool.length; i++) {
+                arr[i] = Integer.parseInt(dataPool[i]);
+            }
+            send(arr[0] + arr[1] + arr[2]);
 
         } catch (IOException ex) {
             Logger.getLogger(UDPMServer.class.getName()).log(Level.SEVERE, null, ex);
