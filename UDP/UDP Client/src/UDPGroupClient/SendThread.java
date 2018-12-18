@@ -85,19 +85,19 @@ public class SendThread extends Thread {
     public void run() {
         Scanner scan = new Scanner(System.in);
         try {
-            while (live) {
+            while (this.live) {
                 /**
                  * Application contents --------------------------------
                  */
                 String d = scan.nextLine();
-                if(d.equals("EXIT"))
-                {
+                if (d.equals("EXIT")) {
                     this.live = false;
-                    continue;
+                } else {
+                    requestConnect(1, 1024);
+                    this.send(d);
+                    this.PacketTag = 0;
                 }
-                requestConnect(1, 1024);
-                this.send(d);
-                this.PacketTag = 0;
+
                 /**
                  * Application contents --------------------------------
                  */

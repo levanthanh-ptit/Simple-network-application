@@ -6,14 +6,10 @@
 package UDPGroupClient;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -41,7 +37,6 @@ public class UDPGroupClient {
     }
 
     public static void main(String[] args) throws SocketException, UnknownHostException, IOException {
-        Scanner scan = new Scanner(System.in);
         /**
          * Application contents --------------------------------
          */
@@ -53,8 +48,9 @@ public class UDPGroupClient {
         sendThread.start();
         while (sendThread.live) {
         }
-        reciveThread.live = false;
+        reciveThread.close();
         client.socket.leaveGroup(client.GroupServerAddress);
+        client.socket.close();
         /**
          * Application contents --------------------------------
          */

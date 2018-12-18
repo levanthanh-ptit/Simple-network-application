@@ -20,7 +20,7 @@ public class ReciveThread extends Thread {
     MulticastSocket socket;
     int PacketTag = 0;
     int PacketSize = 256;
-    boolean live = true;
+    public boolean live = true;
 
     public ReciveThread(MulticastSocket socket) {
         this.socket = socket;
@@ -48,7 +48,13 @@ public class ReciveThread extends Thread {
             /**
              * Application contents --------------------------------
              */
-            System.out.println("==>"+this.receive());
+            String out = this.receive();
+            try {
+                this.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ReciveThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("==>"+out);
             /**
              * Application contents --------------------------------
              */
