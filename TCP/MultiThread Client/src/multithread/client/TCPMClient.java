@@ -20,39 +20,38 @@ import java.util.logging.Logger;
  */
 public class TCPMClient {
 
-    /**
-     * @param args the command line arguments
-     */
+    public static Socket socket;
+    public static DataInputStream receive;
+    public static DataOutputStream send;
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         try {
-            Socket socket = new Socket(InetAddress.getByName("localhost"), 8080);
-            DataInputStream rec = new DataInputStream(socket.getInputStream());
-            DataOutputStream send = new DataOutputStream(socket.getOutputStream());
+            socket = new Socket(InetAddress.getByName("localhost"), 4441);
+            receive = new DataInputStream(socket.getInputStream());
+            send = new DataOutputStream(socket.getOutputStream());
             /**
              * Application contents --------------------------------
              */
-            send.write(scan.nextInt());
-//            int numCount = 0;
-//            while (numCount < 3) {
-//                System.out.print("Nhap so: ");
-//                send.write(scan.nextInt());
-//                String res = rec.readUTF();
-//                if (res == "sai") {
-//                    System.out.println("Nhap sai, xin nhap lai");
-//                    System.out.print("Nhap so: ");
-//                    send.write(scan.nextInt());
-//                } else if (res == "dung") {
-//                    numCount ++;
-//                }
-//            }
-//            int sum = rec.readInt();
-//            System.out.println("Tong 3 so la: "+sum);
-
+            int numCount = 0;
+            while (numCount < 3) {
+                int a;
+                System.out.print("Nhap so: ");
+                a = scan.nextInt();
+                send.writeInt(a);
+                String res = receive.readUTF();
+                if (res.compareTo("sai") == 0) {
+                    System.out.println("Nhap sai, xin nhap lai");
+                } else if (res.compareTo("dung") == 0) {
+                    numCount++;
+                }
+            }
+            int sum = receive.readInt();
+            System.out.println("Tong 3 so la: " + sum);
             /**
              * Application contents --------------------------------
              */
-            rec.close();
+            receive.close();
             send.close();
             socket.close();
         } catch (IOException ex) {

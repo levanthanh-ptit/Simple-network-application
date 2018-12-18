@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package singlethread.client;
+package tcp.client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -20,15 +20,16 @@ import java.util.logging.Logger;
  */
 public class TCPClient {
 
-    /**
-     * @param args the command line arguments
-     */
+    public static Socket socket;
+    public static DataInputStream receive;
+    public static DataOutputStream send;
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         try {
-            Socket socket = new Socket(InetAddress.getByName("localhost"), 4441);
-            DataInputStream receive = new DataInputStream(socket.getInputStream());
-            DataOutputStream send = new DataOutputStream(socket.getOutputStream());
+            socket = new Socket(InetAddress.getByName("localhost"), 4441);
+            receive = new DataInputStream(socket.getInputStream());
+            send = new DataOutputStream(socket.getOutputStream());
             /**
              * Application contents --------------------------------
              */
@@ -39,14 +40,14 @@ public class TCPClient {
                 a = scan.nextInt();
                 send.writeInt(a);
                 String res = receive.readUTF();
-                if (res.compareTo("sai")==0) {
+                if (res.compareTo("sai") == 0) {
                     System.out.println("Nhap sai, xin nhap lai");
-                } else if (res.compareTo("dung")==0) {
-                    numCount ++;
+                } else if (res.compareTo("dung") == 0) {
+                    numCount++;
                 }
             }
             int sum = receive.readInt();
-            System.out.println("Tong 3 so la: "+sum);
+            System.out.println("Tong 3 so la: " + sum);
             /**
              * Application contents --------------------------------
              */

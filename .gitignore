@@ -38,3 +38,9 @@ hs_err_pid*
 /TCP/MultiThread Client/build/
 /TCP/SingleThread Server/build/
 /TCP/SingleThread Client/build/
+/TCP/TCP Client/nbproject/private/
+/TCP/TCP Client/build/
+/TCP/TCP MultiThread Server/build/
+/TCP/TCP MultiThread Server/nbproject/private/
+/TCP/TCP Server/nbproject/private/
+/UDP/UDP Server/nbproject/private/
