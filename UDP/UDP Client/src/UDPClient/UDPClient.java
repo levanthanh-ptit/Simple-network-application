@@ -45,7 +45,7 @@ class UDPClient {
 
     public boolean requestConnect(int packetCount, int packetSize) {
         byte[] bufRes = getBuffPacket();
-        String requestConnectString = "" + packetCount + "," + packetSize + "";
+        String requestConnectString = packetCount + "`" + packetSize;
         bufRes = requestConnectString.getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ServerAddress, ServerPort);
         this.PacketSize = packetSize;
