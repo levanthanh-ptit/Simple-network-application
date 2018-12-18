@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package multithread.server;
+package MTServer;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author ThanhLeVan
  */
-public class UDPMServer extends Thread {
+public class UDPMServer {
 
     DatagramSocket socket;
     InetAddress ClientAddress;
@@ -66,12 +66,12 @@ public class UDPMServer extends Thread {
     public int receive() throws IOException {
         DatagramPacket p = new DatagramPacket(this.getBuffPacket(), this.PacketSize);
         socket.receive(p);
-        String[] sp = new String(p.getData()).trim().split("#");
+        String[] sp = new String(p.getData()).trim().split("`");
         dataPool[Integer.parseInt(sp[0])] = sp[1];
         DataReceivedCount++;
         return Integer.parseInt(sp[0]);
     }
-
+    
     public void send(int num) throws IOException {
         byte[] bufRes = getBuffPacket();
         bufRes = String.valueOf(num).getBytes();
@@ -94,7 +94,7 @@ public class UDPMServer extends Thread {
 
     }
 
-    public void run() {
+    public void start() {
 
         /**
          * Application contents --------------------------------
@@ -121,7 +121,6 @@ public class UDPMServer extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(UDPMServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         /**
          * Application contents --------------------------------
          */

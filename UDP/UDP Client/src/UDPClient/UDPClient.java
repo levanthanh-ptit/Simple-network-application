@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package udpmultithread.client;
+package UDPClient;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author ThanhLeVan
  */
-public class UDPMClient {
+class UDPClient {
 
     DatagramSocket socket;
     InetAddress ServerAddress;
@@ -27,7 +27,7 @@ public class UDPMClient {
     int PacketTag = 0;
     int PacketSize = 256;
 
-    public UDPMClient(int ServerPort) throws SocketException, UnknownHostException {
+    public UDPClient(int ServerPort) throws SocketException, UnknownHostException {
         socket = new DatagramSocket();
         ServerAddress = InetAddress.getByName("localhost");
         this.ServerPort = ServerPort;
@@ -37,7 +37,7 @@ public class UDPMClient {
         return new byte[this.PacketSize];
     }
 
-    public UDPMClient(String host, int ServerPort) throws SocketException, UnknownHostException {
+    public UDPClient(String host, int ServerPort) throws SocketException, UnknownHostException {
         socket = new DatagramSocket();
         ServerAddress = InetAddress.getByName(host);
         this.ServerPort = ServerPort;
@@ -62,14 +62,14 @@ public class UDPMClient {
         try {
             socket.receive(p);
         } catch (IOException ex) {
-            Logger.getLogger(UDPMClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UDPClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new String(p.getData()).trim();
     }
 
     public void send(int num) throws IOException {
         byte[] bufRes = getBuffPacket();
-        bufRes = (String.valueOf(PacketTag) + "#" + String.valueOf(num)).getBytes();
+        bufRes = (String.valueOf(PacketTag) + "`" + String.valueOf(num)).getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ServerAddress, ServerPort);
         this.socket.send(Res);
         PacketTag++;
@@ -77,7 +77,7 @@ public class UDPMClient {
 
     public void send(String data) throws IOException {
         byte[] bufRes = getBuffPacket();
-        bufRes = (String.valueOf(PacketTag) + "#" + data).getBytes();
+        bufRes = (String.valueOf(PacketTag) + "`" + data).getBytes();
         DatagramPacket Res = new DatagramPacket(bufRes, bufRes.length, ServerAddress, ServerPort);
         this.socket.send(Res);
         PacketTag++;
@@ -88,11 +88,11 @@ public class UDPMClient {
     }
 
     public static void main(String[] args) throws SocketException, UnknownHostException {
-        UDPMClient client = new UDPMClient(4442);
         Scanner scan = new Scanner(System.in);
         /**
          * Application contents --------------------------------
          */
+        UDPClient client = new UDPClient(4442);
         if (client.requestConnect(3, 1024)) {   //3 packets 1024 bytes
             try {
 
@@ -114,7 +114,7 @@ public class UDPMClient {
                 System.out.println("Tong 3 so la: " + sum);
 
             } catch (IOException ex) {
-                Logger.getLogger(UDPMClient.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UDPClient.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             System.out.println("Server not found");
